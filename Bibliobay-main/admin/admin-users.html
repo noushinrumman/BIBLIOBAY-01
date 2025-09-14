@@ -1,0 +1,645 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <title>User Management | BiblioBay Admin</title>
+  <style>
+    :root {
+      --primary-color: #4caf50;
+      --secondary-color: #93987c;
+      --accent-color: #385b64;
+      --light-bg: #f8f9fa;
+      --sidebar-width: 250px;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-bg);
+    }
+    
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background-color: var(--accent-color);
+      padding-top: 20px;
+      z-index: 1000;
+      transition: all 0.3s;
+    }
+    
+    .sidebar-header {
+      text-align: center;
+      padding: 0 15px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-header h3 {
+      color: white;
+      margin: 10px 0 0;
+      font-weight: 600;
+    }
+    
+    .sidebar-menu {
+      padding: 20px 0;
+    }
+    
+    .sidebar-menu .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s;
+    }
+    
+    .sidebar-menu .nav-link:hover {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-menu .nav-link.active {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-left: 3px solid white;
+    }
+    
+    .sidebar-menu .nav-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .content {
+      margin-left: var(--sidebar-width);
+      padding: 20px;
+      transition: all 0.3s;
+    }
+    
+    .topbar {
+      background-color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .page-header {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .users-table {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .toggle-sidebar {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--accent-color);
+    }
+    
+    .action-buttons .btn {
+      margin-right: 5px;
+    }
+    
+    .user-status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+    }
+    
+    .status-active {
+      background-color: #28a745;
+    }
+    
+    .status-inactive {
+      background-color: #dc3545;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        margin-left: -250px;
+      }
+      
+      .sidebar.active {
+        margin-left: 0;
+      }
+      
+      .content {
+        margin-left: 0;
+      }
+      
+      .toggle-sidebar {
+        display: block;
+      }
+      
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .page-header .btn {
+        margin-top: 10px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-book fa-2x text-white"></i>
+      <h3>BiblioBay Admin</h3>
+    </div>
+    
+    <div class="sidebar-menu">
+      <nav class="nav flex-column">
+        <a class="nav-link" href="admin-dashboard.html">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a class="nav-link" href="admin-books.html">
+          <i class="fas fa-book"></i> Books
+        </a>
+        <a class="nav-link active" href="admin-users.html">
+          <i class="fas fa-users"></i> Users
+        </a>
+        <a class="nav-link" href="admin-orders.html">
+          <i class="fas fa-shopping-cart"></i> Orders
+        </a>
+        <a class="nav-link" href="admin-blogs.html">
+          <i class="fas fa-blog"></i> Blogs
+        </a>
+        <a class="nav-link" href="admin-reviews.html">
+          <i class="fas fa-star"></i> Reviews
+        </a>
+        <a class="nav-link" href="admin-settings.html">
+          <i class="fas fa-cog"></i> Settings
+        </a>
+        <a class="nav-link" href="#" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </nav>
+    </div>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <button class="toggle-sidebar" id="toggleSidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <div>
+        <span class="me-3">Welcome, Admin</span>
+        <a href="./index.html" class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-external-link-alt"></i> View Site
+        </a>
+      </div>
+    </div>
+    
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h2>User Management</h2>
+        <p class="text-muted mb-0">Manage registered users and their information</p>
+      </div>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+        <i class="fas fa-user-plus"></i> Add New User
+      </button>
+    </div>
+    
+    <!-- Users Table -->
+    <div class="users-table">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>All Users</h3>
+        <div class="d-flex">
+          <input type="text" class="form-control me-2" placeholder="Search users..." id="searchUsers">
+          <select class="form-select" id="roleFilter">
+            <option value="">All Roles</option>
+            <option value="customer">Customer</option>
+            <option value="member">Member</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Avatar</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Joined</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#USR001</td>
+              <td><img src="https://picsum.photos/seed/user1/40/40.jpg" alt="User Avatar" class="user-avatar"></td>
+              <td>John Smith</td>
+              <td>john.smith@example.com</td>
+              <td><span class="badge bg-primary">Customer</span></td>
+              <td>2023-01-15</td>
+              <td><span class="user-status status-active"></span> Active</td>
+              <td class="action-buttons">
+                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewUserModal">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>#USR002</td>
+              <td><img src="https://picsum.photos/seed/user2/40/40.jpg" alt="User Avatar" class="user-avatar"></td>
+              <td>Jane Doe</td>
+              <td>jane.doe@example.com</td>
+              <td><span class="badge bg-info">Member</span></td>
+              <td>2023-02-20</td>
+              <td><span class="user-status status-active"></span> Active</td>
+              <td class="action-buttons">
+                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewUserModal">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>#USR003</td>
+              <td><img src="https://picsum.photos/seed/user3/40/40.jpg" alt="User Avatar" class="user-avatar"></td>
+              <td>Robert Johnson</td>
+              <td>robert.johnson@example.com</td>
+              <td><span class="badge bg-primary">Customer</span></td>
+              <td>2023-03-10</td>
+              <td><span class="user-status status-active"></span> Active</td>
+              <td class="action-buttons">
+                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewUserModal">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>#USR004</td>
+              <td><img src="https://picsum.photos/seed/user4/40/40.jpg" alt="User Avatar" class="user-avatar"></td>
+              <td>Emily Davis</td>
+              <td>emily.davis@example.com</td>
+              <td><span class="badge bg-danger">Admin</span></td>
+              <td>2023-01-05</td>
+              <td><span class="user-status status-active"></span> Active</td>
+              <td class="action-buttons">
+                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewUserModal">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>#USR005</td>
+              <td><img src="https://picsum.photos/seed/user5/40/40.jpg" alt="User Avatar" class="user-avatar"></td>
+              <td>Michael Wilson</td>
+              <td>michael.wilson@example.com</td>
+              <td><span class="badge bg-primary">Customer</span></td>
+              <td>2023-04-18</td>
+              <td><span class="user-status status-inactive"></span> Inactive</td>
+              <td class="action-buttons">
+                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewUserModal">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  
+  <!-- Add User Modal -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addUserForm">
+            <div class="mb-3">
+              <label for="userName" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="userName" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="userEmail" class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="userEmail" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="userPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="userPassword" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="userRole" class="form-label">Role</label>
+              <select class="form-select" id="userRole" required>
+                <option value="">Select Role</option>
+                <option value="customer">Customer</option>
+                <option value="member">Member</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            
+            <div class="mb-3">
+              <label for="userPhone" class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="userPhone">
+            </div>
+            
+            <div class="mb-3">
+              <label for="userAddress" class="form-label">Address</label>
+              <textarea class="form-control" id="userAddress" rows="2"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="saveUserBtn">Save User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- View User Modal -->
+  <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewUserModalLabel">User Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-3">
+            <img src="https://picsum.photos/seed/user1/100/100.jpg" alt="User Avatar" class="rounded-circle" width="100" height="100">
+            <h5 class="mt-2">John Smith</h5>
+            <span class="badge bg-primary">Customer</span>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-5"><strong>User ID:</strong></div>
+            <div class="col-7">#USR001</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-5"><strong>Email:</strong></div>
+            <div class="col-7">john.smith@example.com</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-5"><strong>Phone:</strong></div>
+            <div class="col-7">+1 (555) 123-4567</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-5"><strong>Address:</strong></div>
+            <div class="col-7">123 Main St, New York, NY 10001</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-5"><strong>Joined:</strong></div>
+            <div class="col-7">January 15, 2023</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-5"><strong>Last Login:</strong></div>
+            <div class="col-7">June 15, 2023</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-5"><strong>Status:</strong></div>
+            <div class="col-7"><span class="user-status status-active"></span> Active</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-5"><strong>Total Orders:</strong></div>
+            <div class="col-7">12</div>
+          </div>
+          
+          <div class="row">
+            <div class="col-5"><strong>Total Spent:</strong></div>
+            <div class="col-7">$245.75</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal" data-bs-dismiss="modal">Edit User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Edit User Modal -->
+  <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editUserForm">
+            <div class="mb-3">
+              <label for="editUserName" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="editUserName" value="John Smith" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="editUserEmail" class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="editUserEmail" value="john.smith@example.com" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="editUserRole" class="form-label">Role</label>
+              <select class="form-select" id="editUserRole" required>
+                <option value="">Select Role</option>
+                <option value="customer" selected>Customer</option>
+                <option value="member">Member</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            
+            <div class="mb-3">
+              <label for="editUserPhone" class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="editUserPhone" value="+1 (555) 123-4567">
+            </div>
+            
+            <div class="mb-3">
+              <label for="editUserAddress" class="form-label">Address</label>
+              <textarea class="form-control" id="editUserAddress" rows="2">123 Main St, New York, NY 10001</textarea>
+            </div>
+            
+            <div class="mb-3">
+              <label for="editUserStatus" class="form-label">Status</label>
+              <select class="form-select" id="editUserStatus" required>
+                <option value="active" selected>Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="updateUserBtn">Update User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Toggle sidebar
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'admin-login.html';
+    });
+    
+    // Check if admin is logged in
+    window.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('adminLoggedIn') !== 'true') {
+        window.location.href = 'admin-login.html';
+      }
+    });
+    
+    // Save user functionality
+    document.getElementById('saveUserBtn').addEventListener('click', function() {
+      // In a real application, this would save to a database
+      alert('User saved successfully!');
+      bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+      document.getElementById('addUserForm').reset();
+    });
+    
+    // Update user functionality
+    document.getElementById('updateUserBtn').addEventListener('click', function() {
+      // In a real application, this would update in a database
+      alert('User updated successfully!');
+      bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+    });
+    
+    // Search functionality
+    document.getElementById('searchUsers').addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const tableRows = document.querySelectorAll('tbody tr');
+      
+      tableRows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+    
+    // Role filter functionality
+    document.getElementById('roleFilter').addEventListener('change', function() {
+      const selectedRole = this.value.toLowerCase();
+      const tableRows = document.querySelectorAll('tbody tr');
+      
+      tableRows.forEach(row => {
+        if (selectedRole === '') {
+          row.style.display = '';
+        } else {
+          const role = row.cells[4].textContent.toLowerCase();
+          if (role.includes(selectedRole)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
