@@ -101,7 +101,7 @@ var swiper = new Swiper(".books-slider", {
   },
 });
 
-var swiper = new Swiper(".populer-slider", {
+var swiper = new Swiper(".popular-slider", {
   spaceBetween: 10,
   loop: true,
   centeredSlides: true,
@@ -206,4 +206,6 @@ loadMoreBtn.onclick = () => {
   if (currentItem >= boxes.length) {
     loadMoreBtn.style.display = "none";
   }
+
+  
 };

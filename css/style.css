@@ -27,6 +27,7 @@ html {
   overflow-x: hidden;
   scroll-padding-top: 5rem;
   scroll-behavior: smooth;
+  user-select: none;
 }
 
 html::-webkit-scrollbar {
@@ -322,7 +323,7 @@ section {
 }
 
 /* Popular Section */
-.populer .box .btn {
+.popular .box .btn {
   margin-top: 1rem;
   display: inline-block;
   padding: 10px 20px;
@@ -334,7 +335,7 @@ section {
   font-weight: 500;
 }
 
-.populer .box .btn:hover {
+.popular .box .btn:hover {
   background-color: var(--secondaryColor);
   color: black;
 }
@@ -366,7 +367,7 @@ section {
   border-radius: 7px;
 }
 
-.populer .populer-slider .box {
+.popular .popular-slider .box {
   margin: 2rem 0;
   position: relative;
   overflow: hidden;
@@ -374,18 +375,22 @@ section {
   text-align: center;
 }
 
-.populer .populer-slider .box:hover {
+/* .popular{
+  user-select: none;
+} */
+
+.popular .popular-slider .box:hover {
   border: 1px solid var(--secondaryColor);
 }
 
-.populer .populer-slider .box .image {
+.popular .popular-slider .box .image {
   padding: 1rem;
   background: linear-gradient(15deg, #eee 30%, #fff 30.2%);
 }
-.populer .populer-slider .box .image img {
+.popular .popular-slider .box .image img {
   height: 25rem;
 }
-.populer .populer-slider .box .icons {
+.popular .popular-slider .box .icons {
   border-bottom: var(--border-hover);
   position: absolute;
   top: 0;
@@ -395,38 +400,38 @@ section {
   z-index: 1;
   transform: translateY(-105%);
 }
-.populer .populer-slider .box:hover .icons {
+.popular .popular-slider .box:hover .icons {
   transform: translateY(0%);
 }
-.populer .populer-slider .box:hover .image {
+.popular .popular-slider .box:hover .image {
   transform: translateY(6rem);
 }
 
-.populer .populer-slider .box .icons a {
+.popular .popular-slider .box .icons a {
   color: var(--black);
   font-size: 2.2rem;
   padding: 1.2rem 1.5rem;
 }
 
-.populer .populer-slider .box .icons a:hover {
+.popular .popular-slider .box .icons a:hover {
   background: var(--primaryColor);
   color: #fff;
 }
-.populer .populer-slider .box .content {
+.popular .popular-slider .box .content {
   background: #eee;
   padding: 1.5rem;
 }
-.populer .populer-slider .box .content h3 {
+.popular .popular-slider .box .content h3 {
   font-size: 2rem;
   color: var(--black);
 }
-.populer .populer-slider .box .content .price {
+.popular .popular-slider .box .content .price {
   font-size: 1.8rem;
   color: var(--black);
   padding-top: 1rem;
 }
 
-.populer .populer-slider .box .content .price span {
+.popular .popular-slider .box .content .price span {
   font-size: 1.5rem;
   color: var(--light-color);
   text-decoration: line-through;
